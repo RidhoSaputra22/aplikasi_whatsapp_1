@@ -682,89 +682,189 @@ class _ChatScreenState extends State<ChatScreen> {
                             ),
                     ),
                     if (!_isEditingImage)
-                      Stack(
-                        children: [
-                          // Container utama: latar belakang dengan ikon kiri & kanan
-                          Container(
-                            height: 60,
-                            color: Colors.grey[200], // abu-abu terang
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Row(
+                      IsMobile
+                          ? Container(
+                              // margin: const EdgeInsets.only(bottom: 8),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      height: 60,
+                                      margin: const EdgeInsets.all(4),
+                                      padding: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        color: accentColor, // abu-abu terang
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(100),
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          // Icon Tambah di kiri
+                                          IconButton(
+                                            icon: const Icon(
+                                              Icons.sticky_note_2_outlined,
+                                              color: Colors.white,
+                                            ),
+                                            onPressed: () {},
+                                          ),
+
+                                          Expanded(
+                                            child: TextField(
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                              controller: _messageController,
+                                              decoration: const InputDecoration(
+                                                hintText: 'Ketik pesan',
+                                                hintStyle: TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                                border: InputBorder.none,
+                                              ),
+                                              onChanged: (_) {
+                                                setState(() {});
+                                              },
+                                            ),
+                                          ),
+                                          Transform.rotate(
+                                            angle: -180 * 3.14 / 360,
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.attachment,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  _showAttachmentMenu =
+                                                      !_showAttachmentMenu;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                          IconButton(
+                                            color: Colors.white,
+                                            icon: const Icon(
+                                              Icons.camera_alt_outlined,
+                                            ),
+                                            onPressed: () {},
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: const EdgeInsets.only(right: 4),
+                                    padding: const EdgeInsets.all(4),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color.fromARGB(255, 4, 255, 0),
+                                    ),
+                                    child: IconButton(
+                                      icon:
+                                          _messageController.text.trim().isEmpty
+                                              ? const Icon(Icons.mic,
+                                                  color: Color(0xFF075e54))
+                                              : const Icon(Icons.send,
+                                                  color: Color(0xFF075e54)),
+                                      onPressed:
+                                          _messageController.text.trim().isEmpty
+                                              ? () {
+                                                  // Aksi rekam suara
+                                                }
+                                              : _sendMessage,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )
+                          : Stack(
                               children: [
-                                // Icon Tambah di kiri
-                                IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: () {
-                                    setState(() {
-                                      _showAttachmentMenu =
-                                          !_showAttachmentMenu;
-                                    });
-                                  },
+                                // Container utama: latar belakang dengan ikon kiri & kanan
+                                Container(
+                                  height: 60,
+                                  color: Colors.grey[200], // abu-abu terang
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Row(
+                                    children: [
+                                      // Icon Tambah di kiri
+                                      IconButton(
+                                        icon: const Icon(Icons.add),
+                                        onPressed: () {
+                                          setState(() {
+                                            _showAttachmentMenu =
+                                                !_showAttachmentMenu;
+                                          });
+                                        },
+                                      ),
+                                      const Spacer(), // Mic / Send Button tergantung isi pesan
+                                      IconButton(
+                                        icon: _messageController.text
+                                                .trim()
+                                                .isEmpty
+                                            ? const Icon(Icons.mic,
+                                                color: Color(0xFF075e54))
+                                            : const Icon(Icons.send,
+                                                color: Color(0xFF075e54)),
+                                        onPressed: _messageController.text
+                                                .trim()
+                                                .isEmpty
+                                            ? () {
+                                                // Aksi rekam suara
+                                              }
+                                            : _sendMessage,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                const Spacer(), // Mic / Send Button tergantung isi pesan
-                                IconButton(
-                                  icon: _messageController.text.trim().isEmpty
-                                      ? const Icon(Icons.mic,
-                                          color: Color(0xFF075e54))
-                                      : const Icon(Icons.send,
-                                          color: Color(0xFF075e54)),
-                                  onPressed:
-                                      _messageController.text.trim().isEmpty
-                                          ? () {
-                                              // Aksi rekam suara
-                                            }
-                                          : _sendMessage,
+
+                                // TextField tepat di tengah container utama
+                                Positioned.fill(
+                                  child: Center(
+                                    child: Container(
+                                      height: 44, // tinggi TextField
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 60),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            color: Colors.grey.shade300),
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal:
+                                              8), // dikurangi agar muat icon + textfield
+                                      child: Row(
+                                        children: [
+                                          IconButton(
+                                            icon: const Icon(
+                                                Icons.emoji_emotions_outlined,
+                                                color: Colors.grey),
+                                            onPressed: () {
+                                              // aksi buka panel stiker
+                                            },
+                                            tooltip: 'Stiker',
+                                          ),
+                                          Expanded(
+                                            child: TextField(
+                                              controller: _messageController,
+                                              decoration: const InputDecoration(
+                                                hintText: 'Ketik pesan',
+                                                border: InputBorder.none,
+                                              ),
+                                              onChanged: (_) {
+                                                setState(() {});
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-
-                          // TextField tepat di tengah container utama
-                          Positioned.fill(
-                            child: Center(
-                              child: Container(
-                                height: 44, // tinggi TextField
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 60),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                  border:
-                                      Border.all(color: Colors.grey.shade300),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal:
-                                        8), // dikurangi agar muat icon + textfield
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      icon: const Icon(
-                                          Icons.emoji_emotions_outlined,
-                                          color: Colors.grey),
-                                      onPressed: () {
-                                        // aksi buka panel stiker
-                                      },
-                                      tooltip: 'Stiker',
-                                    ),
-                                    Expanded(
-                                      child: TextField(
-                                        controller: _messageController,
-                                        decoration: const InputDecoration(
-                                          hintText: 'Ketik pesan',
-                                          border: InputBorder.none,
-                                        ),
-                                        onChanged: (_) {
-                                          setState(() {});
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                   ],
                 ),
                 if (_showAttachmentMenu)
