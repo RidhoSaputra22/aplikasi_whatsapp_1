@@ -45,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
       if (imageBytes != null) {
         photo = await Chat.upload(imageBytes);
       }
+
       final response = await Chat.send(Message(
         content: text,
         user_id: "1",
